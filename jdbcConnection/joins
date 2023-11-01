@@ -1,0 +1,94 @@
+create database DBLab;
+use DBLab;
+
+-- Create a Transactions table
+CREATE TABLE Transactions (
+    TransactionID INT PRIMARY KEY,
+    AccountID INT,
+    TransactionAmount DECIMAL(10, 2)
+);
+
+-- Insert demo data into Transactions
+INSERT INTO Transactions (TransactionID, AccountID, TransactionAmount)
+VALUES
+    (1, 1, 100.00),
+    (2, 2, 200.00),
+    (3, 3, 50.00),
+    (4, 4, -75.00),
+    (5, 5, 300.00),
+    (6, 6, -40.00),
+    (7, 7, 150.00),
+    (8, 8, -30.00),
+    (9, 9, 75.00),
+    (10, 10, 250.00);
+    
+    -- Create the BankAccounts table
+CREATE TABLE BankAccounts (
+    AccountID INT PRIMARY KEY,
+    AccountNumber VARCHAR(20),
+    AccountHolderName VARCHAR(100),
+    Balance DECIMAL(10, 2),
+    AccountType VARCHAR(20)
+);
+
+-- Insert demo data for bank accounts
+INSERT INTO BankAccounts (AccountID, AccountNumber, AccountHolderName, Balance, AccountType)
+VALUES
+    (1, '1234567890', 'John Doe', 5000.00, 'Savings'),
+    (2, '9876543210', 'Jane Smith', 10000.00, 'Checking'),
+    (3, '5555555555', 'Bob Johnson', 7500.50, 'Savings'),
+    (4, '1111222233', 'Alice Brown', 12000.25, 'Checking'),
+    (5, '9999888877', 'David Lee', 8500.75, 'Savings'),
+    (6, '3333444455', 'Eva Davis', 9500.00, 'Checking'),
+    (7, '7777666655', 'Michael Wilson', 6000.75, 'Savings'),
+    (8, '8888777766', 'Sara White', 11000.50, 'Checking'),
+    (9, '6666555544', 'William Turner', 7800.25, 'Savings'),
+    (10, '4444333322', 'Olivia Miller', 13500.00, 'Checking');
+
+-- NATURAL JOIN between BankAccounts and Transactions
+SELECT * FROM BankAccounts
+NATURAL JOIN Transactions;
+
+
+-- INNER JOIN between BankAccounts and Transactions
+SELECT BankAccounts.AccountID, AccountHolderName, Balance, TransactionAmount
+FROM BankAccounts
+INNER JOIN Transactions ON BankAccounts.AccountID = Transactions.AccountID;
+
+
+-- Outer Join
+
+-- 1. LEFT OUTER JOIN between BankAccounts and Transactions
+SELECT BankAccounts.AccountID, AccountHolderName, Balance, TransactionAmount
+FROM BankAccounts
+LEFT OUTER JOIN Transactions ON BankAccounts.AccountID = Transactions.AccountID;
+
+-- 2. RIGHT OUTER JOIN between BankAccounts and Transactions
+SELECT BankAccounts.AccountID, AccountHolderName, Balance, TransactionAmount
+FROM BankAccounts
+RIGHT OUTER JOIN Transactions ON BankAccounts.AccountID = Transactions.AccountID;
+
+
+-- 3.CROSS JOIN between BankAccounts and Transactions
+SELECT BankAccounts.AccountID, AccountHolderName, Balance, TransactionAmount
+FROM BankAccounts
+CROSS JOIN Transactions;
+
+
+ 
+-- 4. FULL JOIN between BankAccounts and Transactions
+SELECT BankAccounts.AccountID, AccountHolderName, Balance, TransactionAmount
+FROM BankAccounts
+FULL JOIN Transactions ON BankAccounts.AccountID = Transactions.AccountID;
+
+
+-- 5. FULL JOIN between BankAccounts and Transactions using UNION
+SELECT b.AccountID, b.AccountNumber, b.AccountHolderName, b.Balance, b.AccountType, t.TransactionID, t.TransactionAmount
+FROM BankAccounts b
+LEFT JOIN Transactions t ON b.AccountID = t.AccountID
+UNION
+SELECT b.AccountID, b.AccountNumber, b.AccountHolderName, b.Balance, b.AccountType, t.TransactionID, t.TransactionAmount
+FROM BankAccounts b
+RIGHT JOIN Transactions t ON b.AccountID = t.AccountID;
+
+
